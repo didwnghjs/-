@@ -30,3 +30,312 @@
             <span class="absolute top-3 right-3 bg-white/20 text-xs px-2 py-1 rounded-full backdrop-blur-sm font-medium">고등학생용 확률 분석기</span>
             <h1 class="text-2xl font-black tracking-tight mb-1 mt-2">🎰 과일 & 7 슬롯머신</h1>
             <p class="text-sm text-white/90">딸기·바나나·파인애플·7 조합 시뮬레이터</p>
+        </div>
+
+        <div class="p-6 space-y-6">
+            
+            <div class="bg-amber-50 rounded-2xl p-4 border border-amber-200">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="bg-amber-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">목적</span>
+                    <h3 class="text-sm font-bold text-amber-900">이 앱을 사용하는 이유</h3>
+                </div>
+                <p class="text-xs text-amber-800 leading-relaxed">
+                    본 시뮬레이터는 <strong>딸기, 바나나, 파인애플, 숫자 7</strong>을 활용한 3릴 슬롯머신의 작동 원리와 확률을 고등학생 수준에서 쉽게 이해하고 연구할 수 있도록 제작되었습니다.
+                </p>
+            </div>
+
+            <div class="bg-gray-50 rounded-2xl p-4 border border-gray-200 space-y-2">
+                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider">⚠️ 슬롯머신 이용 핵심 조건 3가지</h4>
+                <ul class="text-xs text-gray-700 space-y-1.5 list-none pl-0">
+                    <li class="flex items-start gap-1.5">
+                        <span class="text-red-500 font-bold">1.</span> 
+                        <span><strong>닉네임 필수:</strong> 모든 테스트 기록은 본인 확인을 위해 빈 값으로 진행할 수 없습니다.</span>
+                    </li>
+                    <li class="flex items-start gap-1.5">
+                        <span class="text-red-500 font-bold">2.</span> 
+                        <span><strong>코인 제한:</strong> 과도한 몰입 방지를 위해 1회 배팅 시 보유 코인 내에서만 가능합니다.</span>
+                    </li>
+                    <li class="flex items-start gap-1.5">
+                        <span class="text-red-500 font-bold">3.</span> 
+                        <span><strong>확률 존중:</strong> 모든 결과는 난수 알고리즘에 의해 즉시 무작위로 결정됩니다.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="flex justify-between items-center bg-gray-100 rounded-xl p-3 text-sm font-medium">
+                <div class="flex items-center gap-1.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span>
+                    <span id="userBadge" class="text-gray-700">게스트 상태</span>
+                </div>
+                <div class="text-gray-600">
+                    보유 코인: <span id="coinDisplay" class="text-indigo-600 font-bold">1,000</span>ⓦ
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <label for="username" class="block text-sm font-bold text-gray-700 mb-1">사용자 닉네임 *</label>
+                    <input type="text" id="username" placeholder="이름 또는 닉네임을 입력하세요" 
+                           class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500 text-sm transition-all">
+                </div>
+
+                <div>
+                    <label for="betAmount" class="block text-sm font-bold text-gray-700 mb-1">배팅 코인 설정 (최소 10) *</label>
+                    <input type="number" id="betAmount" value="100" min="10" step="10"
+                           class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500 text-sm font-mono transition-all">
+                </div>
+
+                <div id="errorMessage" class="hidden bg-red-50 border border-red-200 text-red-700 text-xs p-3 rounded-xl flex items-center gap-2">
+                    <span>⚠️</span> <span id="errorText">입력값을 확인해주세요.</span>
+                </div>
+
+                <button id="spinButton" onclick="playSlotMachine()"
+                        class="w-full py-4 bg-gradient-to-r from-pink-500 to-yellow-500 hover:from-pink-600 hover:to-yellow-600 text-white font-bold rounded-xl shadow-lg transform active:scale-[0.98] transition-all text-base tracking-wide">
+                    🎰 레버 당기기 (SPIN)
+                </button>
+            </div>
+
+            <div class="bg-slate-900 rounded-2xl p-6 text-center text-white shadow-inner relative overflow-hidden">
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:12px_12px]"></div>
+                
+                <div class="flex justify-center gap-4 my-2 relative z-10">
+                    <div id="reel1" class="w-16 h-20 bg-white text-slate-900 text-4xl rounded-xl flex items-center justify-center font-bold shadow-md">🍓</div>
+                    <div id="reel2" class="w-16 h-20 bg-white text-slate-900 text-4xl rounded-xl flex items-center justify-center font-bold shadow-md">🍌</div>
+                    <div id="reel3" class="w-16 h-20 bg-white text-slate-900 text-4xl rounded-xl flex items-center justify-center font-bold shadow-md">🍍</div>
+                </div>
+
+                <div class="mt-4 min-h-[40px] relative z-10">
+                    <p id="resultStatus" class="text-yellow-400 font-bold text-lg">준비 완료! 레버를 당기세요!</p>
+                    <p id="resultDetails" class="text-xs text-gray-400 mt-1">결과가 여기에 표시됩니다.</p>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-sm font-bold text-gray-800 flex items-center gap-1">
+                        📊 시뮬레이션 히스토리
+                    </h3>
+                    <button onclick="clearHistory()" class="text-xs text-gray-400 hover:text-gray-600 underline">전체 삭제</button>
+                </div>
+
+                <div id="historyList" class="max-h-40 overflow-y-auto space-y-2 pr-1 text-xs">
+                    <p class="text-gray-400 text-center py-4">아직 저장된 실행 기록이 없습니다.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // --- 전역 데이터 상태 관리 ---
+        let userCoins = 1000;
+        let historyData = [];
+        const items = ['🍓', '🍌', '🍍', '7️⃣'];
+
+        // --- 앱 초기화 실행 ---
+        window.onload = function() {
+            loadHistory();
+            updateCoinDisplay();
+        };
+
+        // --- 비즈니스 로직 함수 ---
+
+        // 코인 화면 갱신
+        function updateCoinDisplay() {
+            document.getElementById('coinDisplay').innerText = userCoins.toLocaleString();
+        }
+
+        // 경고 메시지 표시 함수
+        function showError(message) {
+            const errBox = document.getElementById('errorMessage');
+            const errTxt = document.getElementById('errorText');
+            errTxt.innerText = message;
+            errBox.classList.remove('hidden');
+        }
+
+        // 경고 메시지 숨김 함수
+        function hideError() {
+            document.getElementById('errorMessage').classList.add('hidden');
+        }
+
+        // 슬롯머신 작동 메인 함수
+        function playSlotMachine() {
+            hideError();
+
+            // 1. 사용자 입력값 가져오기
+            const usernameInput = document.getElementById('username').value.trim();
+            const betInput = document.getElementById('betAmount').value;
+            const betAmount = parseInt(betInput, 10);
+
+            // 2. 유효성 검사 (사용자 입력이 비어 있으면 진행 불가 조건 충족)
+            if (!usernameInput) {
+                showError("첫 번째 조건을 위반했습니다! 닉네임을 반드시 입력해주세요.");
+                return;
+            }
+            if (!betInput || isNaN(betAmount) || betAmount <= 0) {
+                showError("배팅할 코인 액수를 바르게 입력해주세요.");
+                return;
+            }
+            if (betAmount < 10) {
+                showError("최소 배팅 금액은 10코인입니다.");
+                return;
+            }
+            if (betAmount > userCoins) {
+                showError(`보유 코인이 부족합니다! 현재 보유: ${userCoins}코인`);
+                return;
+            }
+
+            // 3. 게임 실행 상태 UI 업데이트
+            document.getElementById('userBadge').innerText = `${usernameInput} 학생`;
+            userCoins -= betAmount;
+            updateCoinDisplay();
+
+            const spinButton = document.getElementById('spinButton');
+            spinButton.disabled = true;
+            spinButton.innerText = "⚡ 릴 회전 중...";
+
+            // 릴 애니메이션 클래스 추가
+            const r1 = document.getElementById('reel1');
+            const r2 = document.getElementById('reel2');
+            const r3 = document.getElementById('reel3');
+            r1.classList.add('slot-rolling');
+            r2.classList.add('slot-rolling');
+            r3.classList.add('slot-rolling');
+
+            // 4. 무작위 결과 연산 (0.8초 후 결과 도출하여 긴장감 조성)
+            setTimeout(() => {
+                // 무작위 요소 선택
+                const res1 = items[Math.floor(Math.random() * items.length)];
+                const res2 = items[Math.floor(Math.random() * items.length)];
+                const res3 = items[Math.floor(Math.random() * items.length)];
+
+                // 화면에 즉시 반영
+                r1.innerText = res1;
+                r2.innerText = res2;
+                r3.innerText = res3;
+
+                // 애니메이션 제거
+                r1.classList.remove('slot-rolling');
+                r2.classList.remove('slot-rolling');
+                r3.classList.remove('slot-rolling');
+
+                // 결과 분석 및 피드백 생성
+                let prize = 0;
+                let feedbackMessage = "";
+                let isWin = false;
+
+                if (res1 === '7️⃣' && res2 === '7️⃣' && res3 === '7️⃣') {
+                    // 7 대박 잭팟
+                    prize = betAmount * 10;
+                    feedbackMessage = "🎉 대박 잭팟! 행운의 7트리플 달성! (10배 보상)";
+                    isWin = true;
+                } else if (res1 === res2 && res2 === res3) {
+                    // 일반 과일 3개 일치
+                    prize = betAmount * 5;
+                    feedbackMessage = `🍓 과일 트리플 성공! 똑같은 과일이 모였습니다! (5배 보상)`;
+                    isWin = true;
+                } else if (res1 === res2 || res2 === res3 || res1 === res3) {
+                    // 2개 일치 (페어)
+                    prize = Math.floor(betAmount * 1.5);
+                    feedbackMessage = "✨ 더블 페어! 아쉽지만 원금을 건졌네요! (1.5배 보상)";
+                    isWin = true;
+                } else {
+                    // 낙첨
+                    feedbackMessage = "❌ 아쉽게도 꽝입니다. 다음 기회를 노려보세요!";
+                }
+
+                // 코인 정산 반영
+                userCoins += prize;
+                updateCoinDisplay();
+
+                // 즉각적인 결과 화면 하이라이트 효과 적용
+                const statusLabel = document.getElementById('resultStatus');
+                statusLabel.innerText = isWin ? "WINNER!" : "LOSE";
+                statusLabel.className = isWin ? "text-yellow-400 font-black text-2xl animate-bounce" : "text-gray-400 font-bold text-lg";
+                
+                document.getElementById('resultDetails').innerText = `${feedbackMessage} (+${prize}ⓦ)`;
+
+                // 버튼 원상복구
+                spinButton.disabled = false;
+                spinButton.innerText = "🎰 레버 당기기 (SPIN)";
+
+                // 5. 기록 저장 데이터 추가
+                const record = {
+                    time: new Date().toLocaleTimeString('ko-KR', { hour12: false }),
+                    name: usernameInput,
+                    combination: `${res1} | ${res2} | ${res3}`,
+                    bet: betAmount,
+                    gain: prize - betAmount,
+                    status: isWin ? '수익' : '손실'
+                };
+                
+                saveRecord(record);
+
+            }, 800);
+        }
+
+        // 히스토리 기록 저장 및 UI 렌더링
+        function saveRecord(record) {
+            historyData.unshift(record); // 최신 기록을 맨 앞으로
+            if(historyData.length > 20) historyData.pop(); // 최대 20개까지만 유지
+            
+            // 로컬스토리지에 영구 보존
+            localStorage.setItem('slot_history_v1', JSON.stringify(historyData));
+            renderHistory();
+        }
+
+        // 이전 기록 화면에 출력하기
+        function renderHistory() {
+            const container = document.getElementById('historyList');
+            if (historyData.length === 0) {
+                container.innerHTML = `<p class="text-gray-400 text-center py-4">아직 저장된 실행 기록이 없습니다.</p>`;
+                return;
+            }
+
+            container.innerHTML = historyData.map((data) => {
+                const isProfit = data.gain >= 0;
+                const badgeColor = isProfit ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800';
+                const sign = isProfit ? '+' : '';
+
+                return `
+                    <div class="bg-gray-50 border border-gray-100 rounded-xl p-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1 transition-all hover:bg-gray-100">
+                        <div>
+                            <div class="flex items-center gap-1.5 flex-wrap">
+                                <span class="font-bold text-gray-800">${data.name}</span>
+                                <span class="text-[10px] text-gray-400">${data.time}</span>
+                                <span class="px-1.5 py-0.5 rounded text-[10px] font-medium ${badgeColor}">${data.combination}</span>
+                            </div>
+                            <div class="text-[11px] text-gray-500 mt-0.5">배팅 코인: ${data.bet}ⓦ</div>
+                        </div>
+                        <div class="text-right font-mono font-bold ${isProfit ? 'text-emerald-600' : 'text-rose-600'} text-xs self-end sm:self-center">
+                            ${sign}${data.gain.toLocaleString()}ⓦ
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 데이터 로드하기
+        function loadHistory() {
+            const saved = localStorage.getItem('slot_history_v1');
+            if (saved) {
+                try {
+                    historyData = JSON.parse(saved);
+                    renderHistory();
+                } catch(e) {
+                    historyData = [];
+                }
+            }
+        }
+
+        // 히스토리 초기화 기능
+        function clearHistory() {
+            if(confirm("이전 시뮬레이션 기록을 전부 삭제하시겠습니까?")) {
+                historyData = [];
+                localStorage.removeItem('slot_history_v1');
+                renderHistory();
+            }
+        }
+    </script>
+</body>
+</html>
