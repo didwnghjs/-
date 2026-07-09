@@ -23,4 +23,24 @@ def load_html_app():
             return f.read()
             
     except FileNotFoundError:
-        st.error("⚠️ 슬롯머신 파일(html/index.html)을 찾을 수 없습니다. 경로를 다시 한번
+        st.error("⚠️ 슬롯머신 파일(html/index.html)을 찾을 수 없습니다. 경로를 다시 한번 확인해주세요.")
+        return None
+    except Exception as e:
+        st.error(f"⚠️ 웹앱을 불러오는 중 예기치 못한 오류가 발생했습니다: {str(e)}")
+        return None
+
+def main():
+    # HTML 콘텐츠 불러오기
+    html_content = load_html_app()
+    
+    if html_content:
+        # Streamlit 스크롤 영역 설정 및 컴포넌트 래핑 출력
+        # 모바일 및 카드형 레이아웃이 깨지지 않도록 충분한 높이(height=850)를 지정하고 스크롤을 허용합니다.
+        components.html(
+            html_content,
+            height=850,
+            scrolling=True
+        )
+
+if __name__ == "__main__":
+    main()
