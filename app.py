@@ -12,7 +12,7 @@ st.set_page_config(
 
 def load_html_app():
     """
-    htmls/index.html 파일을 안전하게 읽어오는 함수입니다.
+    html/index.html 파일을 안전하게 읽어오는 함수입니다.
     예외 처리를 통해 파일이 없거나 읽기 오류가 발생했을 때 한국어로 친절한 안내를 제공합니다.
     """
     try:
