@@ -17,10 +17,10 @@ def load_html_app():
     """
     try:
         # 요구사항에 명시된 정확한 상대 경로 지정
-        html_path = Path(__file__).resolve().parent / "htmls" / "index.html"
+        html_path = Path(__file__).resolve().parent / "html" / "index.html"
         
         with open(html_path, "r", encoding="utf-8") as f:
             return f.read()
             
     except FileNotFoundError:
-        st.error("⚠️ 슬롯머신 파일(htmls/index.html)을 찾을 수 없습니다. 경로를 다시 한번
+        st.error("⚠️ 슬롯머신 파일(html/index.html)을 찾을 수 없습니다. 경로를 다시 한번
